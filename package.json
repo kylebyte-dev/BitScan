@@ -2,15 +2,21 @@
   "name": "bitscan",
   "version": "1.0.0",
   "description": "My full-stack pet project that tracking calories thru scanning barcodes.",
-  "main": "index.js",
+  "main": "dist/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "devDependencies": {
+    "@types/node": "^26.1.2",
+    "@types/pg": "^8.20.4",
+    "pg": "^8.22.0",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
   }
 }
