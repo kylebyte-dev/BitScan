@@ -1,17 +1,6 @@
 import { createServer } from "node:http";
 import { createProduct } from "./routes/products.js";
 import { ValidationError, ConflictError } from "./errors.js";
-import pool from "./config/database.js";
-
-pool.query("SELECT NOW()")
-
-    .then(result => {
-        console.log(result.rows);
-    })
-
-    .catch(error => {
-        console.error(error);
-    });
 
 const server = createServer(async (request, response) => {
 
