@@ -1,5 +1,5 @@
 import pool from "../config/database.js";
-import { ConflictError } from "../errors.js";
+import { ConflictError, NotFoundError } from "../errors.js";
 
 export async function insertProduct(product: any) {
     try {
@@ -25,4 +25,14 @@ export async function insertProduct(product: any) {
         }
         throw error;
     }
+}
+
+export async function pullProduct(barcode: string) {
+    const result = await pool.query(
+        `SELECT * 
+            FROM products
+            WHERE products.barcode = ($1)`,
+        [barcode]);
+
+    return result.rows[0];
 }
