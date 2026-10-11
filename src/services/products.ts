@@ -1,30 +1,35 @@
 import { ValidationError, NotFoundError } from "../errors.js";
+import type { NewProduct, Product } from "../types.js";
 
-export function validateProduct(data: any) {
+export function validateProduct(data: unknown): NewProduct {
 
     if (typeof data !== "object" || data === null) { throw new ValidationError("Invalid data"); }
 
-    if (typeof data.barcode === "string") { data.barcode = data.barcode.trim(); }
-    validateBarcode(data.barcode);
+    const input = data as Record<string, unknown>;
 
-    if (typeof data.name === "string") { data.name = data.name.trim(); }
-    if (data.name === "" || typeof data.name !== "string") { throw new ValidationError("Invalid name of product"); }
+    if (typeof input.barcode === "string") { input.barcode = input.barcode.trim(); }
+    validateBarcode(input.barcode);
 
-    if (typeof data.calories !== "number" || data.calories < 0) { throw new ValidationError("Invalid calories data"); }
+    if (typeof input.name === "string") { input.name = input.name.trim(); }
+    if (input.name === "" || typeof input.name !== "string") { throw new ValidationError("Invalid name of product"); }
 
-    if (typeof data.protein !== "number" || data.protein < 0) { throw new ValidationError("Invalid protein data"); }
+    if (typeof input.calories !== "number" || input.calories < 0) { throw new ValidationError("Invalid calories data"); }
 
-    if (typeof data.fat !== "number" || data.fat < 0) { throw new ValidationError("Invalid fat data"); }
+    if (typeof input.protein !== "number" || input.protein < 0) { throw new ValidationError("Invalid protein data"); }
 
-    if (typeof data.carbs !== "number" || data.carbs < 0) { throw new ValidationError("Invalid carbs data"); }
+    if (typeof input.fat !== "number" || input.fat < 0) { throw new ValidationError("Invalid fat data"); }
 
+    if (typeof input.carbs !== "number" || input.carbs < 0) { throw new ValidationError("Invalid carbs data"); }
+
+    return input as NewProduct;
 }
 
-export function validateBarcode(barcode: string) {
-    if (typeof barcode !== "string" || !/^\d{8,13}$/.test(barcode)) { throw new ValidationError("Invalid barcode"); }
+export function validateBarcode(barcode: unknown) {
+    if (typeof barcode !== "string" || !/^\d{8,13}$/.test(barcode)) { throw new ValidationError("Invalid barcode"); 
+    }
 }
 
-export function requireProduct(data: any) {
+export function requireProduct(data: Product | undefined) {
     if (data === undefined) { throw new NotFoundError("Product not found"); }
     return data;
 }

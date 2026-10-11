@@ -8,9 +8,7 @@ export async function createProduct(
     response: ServerResponse
 ) {
 
-    const product: any = await readJsonBody(request);
-    validateProduct(product);
-    const result = await insertProduct(product);
+    const result = await insertProduct(validateProduct(await readJsonBody(request)));
 
     response.statusCode = 201;
     response.setHeader("Content-Type", "application/json");

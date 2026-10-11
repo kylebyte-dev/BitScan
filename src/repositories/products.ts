@@ -1,7 +1,8 @@
 import pool from "../config/database.js";
-import { ConflictError, NotFoundError } from "../errors.js";
+import { ConflictError } from "../errors.js";
+import type { NewProduct, Product } from "../types.js";
 
-export async function insertProduct(product: any) {
+export async function insertProduct(product: NewProduct): Promise<Product> {
     try {
         const result = await pool.query(
             `INSERT INTO products
@@ -17,7 +18,7 @@ export async function insertProduct(product: any) {
                 product.carbs
             ]);
 
-        return result.rows[0];
+        return result.rows[0] as Product;
     }
     catch (error: any) {
         if (error.code === "23505") {
@@ -27,7 +28,7 @@ export async function insertProduct(product: any) {
     }
 }
 
-export async function pullProduct(barcode: string) {
+export async function pullProduct(barcode: string): Promise<Product | undefined> {
     const result = await pool.query(
         `SELECT * 
             FROM products
