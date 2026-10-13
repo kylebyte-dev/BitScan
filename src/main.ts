@@ -1,5 +1,6 @@
 import { createServer } from "node:http";
 import { createProduct, getProduct } from "./routes/products.js";
+import { createUser } from "./routes/users.js";
 import { ValidationError, ConflictError, NotFoundError } from "./errors.js";
 
 const server = createServer(async (request, response) => {
@@ -17,6 +18,10 @@ const server = createServer(async (request, response) => {
             await getProduct(response, barcode);
             return;
         }
+        if (request.method === "POST" && path === "/register") {
+            await createUser(request, response);
+            return;
+        }
         response.statusCode = 404;
         response.end("Not Found!");
     }
@@ -24,17 +29,17 @@ const server = createServer(async (request, response) => {
         if (error instanceof ValidationError) {
             response.statusCode = 400;
             response.setHeader("Content-Type", "text/plain");
-            response.end("Error occured: " + error.message);
+            response.end("Error occurred: " + error.message);
         }
         else if (error instanceof NotFoundError) {
             response.statusCode = 404;
             response.setHeader("Content-Type", "text/plain");
-            response.end("Error occured: " + error.message);
+            response.end("Error occurred: " + error.message);
         }
         else if (error instanceof ConflictError) {
             response.statusCode = 409;
             response.setHeader("Content-Type", "text/plain");
-            response.end("Error occured: " + error.message);
+            response.end("Error occurred: " + error.message);
         }
         else {
             console.error(error);
